@@ -1,73 +1,129 @@
-# React + TypeScript + Vite
+# Disease Spread Modeling Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive web-based tool for simulating and visualizing epidemic dynamics using three SIR model variants.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Three SIR Model Variants:**
+  - Basic SIR: Classic susceptible-infected-recovered model
+  - Natural Demographics: SIR with births and natural deaths
+  - Disease Deaths: SIR with disease-induced mortality
 
-## React Compiler
+- **Interactive Visualizations:**
+  - Time series plots showing population dynamics
+  - 3D phase portraits in S-I-R space
+  - Real-time R₀ calculation and display
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Parameter Controls:**
+  - Adjustable transmission rate (β), recovery rate (γ)
+  - Natural birth/death rate (μ), disease mortality rate (α)
+  - Customizable initial conditions
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 with TypeScript
+- Vite for build tooling
+- Plotly.js for interactive visualizations
+- Custom RK4 numerical solver
+- Vitest for unit testing
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js 18+ and npm
+
+### Installation
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Build
+
+```bash
+npm run build
+```
+
+### Test
+
+```bash
+npm test
+```
+
+## Deployment on Vercel
+
+### Option 1: Deploy via Vercel CLI
+
+1. Install Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Deploy:
+```bash
+vercel
+```
+
+3. Follow the prompts to link your project
+
+### Option 2: Deploy via GitHub
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Click "New Project"
+4. Import your GitHub repository
+5. Vercel will auto-detect the Vite framework
+6. Click "Deploy"
+
+### Environment Variables
+
+No environment variables are required for this application.
+
+## Project Structure
+
+```
+src/
+├── models/          # SIR model implementations
+├── solvers/         # Numerical ODE solvers
+├── components/      # React components
+├── hooks/           # Custom React hooks
+├── utils/           # Utility functions
+└── App.tsx          # Main application component
+```
+
+## Model Equations
+
+### Basic SIR
+- dS/dt = -βSI
+- dI/dt = βSI - γI
+- dR/dt = γI
+- R₀ = β/γ
+
+### Natural Demographics
+- dS/dt = μ(S+I+R) - βSI/N - μS
+- dI/dt = βSI/N - γI - μI
+- dR/dt = γI - μR
+- R₀ = β/(γ + μ)
+
+### Disease Deaths
+- dS/dt = μ(S+I+R) - βSI/N - μS
+- dI/dt = βSI/N - γI - μI - αI
+- dR/dt = γI - μR
+- R₀ = β/(γ + μ + α)
+
+## License
+
+MIT
+
+## Author
+
+Built with Kiro AI

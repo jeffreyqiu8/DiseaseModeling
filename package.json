@@ -1,8 +1,10 @@
 {
-  "name": "diseasemodel",
+  "name": "disease-spread-modeler",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Interactive SIR disease spread modeling application",
+  "author": "Built with Kiro AI",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
