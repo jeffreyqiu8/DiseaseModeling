@@ -37,11 +37,6 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>Disease Spread Modeling Application</h1>
-        <p className="app-subtitle">Interactive SIR Model Simulator</p>
-      </header>
-
       <div className="app-layout">
         {/* Controls Section */}
         <aside className="controls-section">
@@ -70,6 +65,7 @@ function App() {
               <TimeSeries 
                 simulationResult={simulationResult}
                 showLegend={true}
+                modelType={selectedModel}
               />
             </div>
             

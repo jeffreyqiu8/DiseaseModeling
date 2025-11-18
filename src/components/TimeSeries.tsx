@@ -7,6 +7,7 @@ import './TimeSeries.css';
 interface TimeSeriesProps {
   simulationResult: SimulationResult | null;
   showLegend?: boolean;
+  modelType?: string;
 }
 
 /**
@@ -15,7 +16,8 @@ interface TimeSeriesProps {
  */
 const TimeSeriesComponent: React.FC<TimeSeriesProps> = ({ 
   simulationResult, 
-  showLegend = true 
+  showLegend = true,
+  modelType = 'basic-sir'
 }) => {
   // Handle null simulation result
   if (!simulationResult) {
@@ -41,7 +43,13 @@ const TimeSeriesComponent: React.FC<TimeSeriesProps> = ({
       </div>
     );
   }
-  // Create three traces for S(t), I(t), and R(t)
+  // Calculate total population for models with vital dynamics
+  const hasVitalDynamics = modelType === 'natural-demographics' || modelType === 'disease-deaths';
+  const totalPopulation = hasVitalDynamics 
+    ? simulationResult.S.map((s, i) => s + simulationResult.I[i] + simulationResult.R[i])
+    : null;
+  
+  // Create traces for S(t), I(t), R(t), and optionally N(t)
   const traces: Plotly.Data[] = [
     {
       x: simulationResult.t,
@@ -71,6 +79,19 @@ const TimeSeriesComponent: React.FC<TimeSeriesProps> = ({
       hovertemplate: '<b>R(t)</b><br>Time: %{x:.2f}<br>Population: %{y:.2f}<extra></extra>',
     },
   ];
+  
+  // Add total population trace for models with vital dynamics
+  if (hasVitalDynamics && totalPopulation) {
+    traces.push({
+      x: simulationResult.t,
+      y: totalPopulation,
+      type: 'scatter',
+      mode: 'lines',
+      name: 'Total Population (N)',
+      line: { color: '#f59e0b', width: 2, dash: 'dash' },
+      hovertemplate: '<b>N(t) = S+I+R</b><br>Time: %{x:.2f}<br>Population: %{y:.2f}<extra></extra>',
+    });
+  }
 
   // Configure plot layout with dark theme
   const layout: Partial<Plotly.Layout> = {

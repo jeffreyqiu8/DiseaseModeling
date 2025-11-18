@@ -18,7 +18,8 @@ describe('DiseaseDeaths Model', () => {
 
       const derivatives = model.computeDerivatives(state, params);
 
-      // dS/dt = μN - βSI/N - μS = 0.01*1000 - 0.5*990*10/1000 - 0.01*990
+      // P = S + I + R = 990 + 10 + 0 = 1000
+      // dS/dt = μP - βSI/N - μS = 0.01*1000 - 0.5*990*10/1000 - 0.01*990
       //       = 10 - 4.95 - 9.9 = -4.85
       expect(derivatives.S).toBeCloseTo(-4.85, 5);
 
@@ -92,6 +93,29 @@ describe('DiseaseDeaths Model', () => {
       expect(() => model.calculateR0(params)).toThrow(
         'Disease Deaths model requires mu and alpha parameters for R₀ calculation'
       );
+    });
+  });
+
+  describe('population dynamics', () => {
+    it('should cause total population to decline due to disease deaths', () => {
+      const state: ModelState = { S: 500, I: 100, R: 400 };
+      const params: ModelParameters = { 
+        beta: 0.1, 
+        gamma: 0.1, 
+        mu: 0.01, 
+        alpha: 0.05, 
+        N: 1000 
+      };
+
+      const derivatives = model.computeDerivatives(state, params);
+
+      // Total population change: dP/dt = dS/dt + dI/dt + dR/dt
+      const dP = derivatives.S + derivatives.I + derivatives.R;
+      
+      // With disease deaths (αI), dP/dt = -αI = -0.05*100 = -5
+      // (births μP cancel with natural deaths μS + μI + μR = μP)
+      expect(dP).toBeCloseTo(-5, 5);
+      expect(dP).toBeLessThan(0); // Population should decline
     });
   });
 

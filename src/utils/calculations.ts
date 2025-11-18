@@ -15,8 +15,8 @@ export interface ParameterRanges {
 
 // Define parameter ranges according to requirements
 export const PARAMETER_RANGES: ParameterRanges = {
-  beta: [0.00001, 10],  // Extended lower bound to support absolute population models
-  gamma: [0.001, 10],
+  beta: [0, 10],  // Allow 0 for no transmission
+  gamma: [0, 10],  // Allow 0 for no recovery
   mu: [0, 1],
   alpha: [0, 10],
   N: [1, 1000000],

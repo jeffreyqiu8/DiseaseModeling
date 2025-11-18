@@ -4,18 +4,21 @@ import type { SIRModel, ModelState, ModelParameters } from './SIRModel';
  * SIR model with natural demographics and disease-induced mortality
  * 
  * Equations:
- * dS/dt = μN - βSI - μS
- * dI/dt = βSI - γI - μI - αI
+ * dS/dt = μ(S+I+R) - βSI/N - μS
+ * dI/dt = βSI/N - γI - μI - αI
  * dR/dt = γI - μR
+ * 
+ * Note: Births are proportional to living population μ(S+I+R)
+ * Disease deaths (αI) cause total population to decline
  * 
  * R₀ = β/(γ + μ + α)
  */
 export class DiseaseDeaths implements SIRModel {
   name = 'Disease Deaths';
-  
+
   equations = [
-    'dS/dt = μN - βSI - μS',
-    'dI/dt = βSI - γI - μI - αI',
+    'dS/dt = μ(S+I+R) - βSI/N - μS',
+    'dI/dt = βSI/N - γI - μI - αI',
     'dR/dt = γI - μR'
   ];
 
@@ -34,8 +37,12 @@ export class DiseaseDeaths implements SIRModel {
       throw new Error('Disease Deaths model requires mu, alpha, and N parameters');
     }
 
+    // Total living population
+    const P = S + I + R;
+
     // Use frequency-dependent transmission: beta * S * I / N
-    const dS = mu * N - (beta * S * I) / N - mu * S;
+    // Births proportional to living population: mu * P
+    const dS = mu * P - (beta * S * I) / N - mu * S;
     const dI = (beta * S * I) / N - gamma * I - mu * I - alpha * I;
     const dR = gamma * I - mu * R;
 
@@ -55,7 +62,14 @@ export class DiseaseDeaths implements SIRModel {
       throw new Error('Disease Deaths model requires mu and alpha parameters for R₀ calculation');
     }
 
-    return beta / (gamma + mu + alpha);
+    const denominator = gamma + mu + alpha;
+
+    // Handle edge case where gamma + mu + alpha = 0 (no recovery, death, or disease death)
+    if (denominator === 0) {
+      return beta > 0 ? Infinity : 0;
+    }
+
+    return beta / denominator;
   }
 
   /**

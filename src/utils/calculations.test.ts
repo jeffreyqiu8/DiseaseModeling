@@ -17,8 +17,13 @@ describe('Parameter Validation', () => {
       expect(result.error).toBeUndefined();
     });
 
+    it('should accept beta at zero', () => {
+      const result = validateParameter('beta', 0);
+      expect(result.isValid).toBe(true);
+    });
+
     it('should reject beta below minimum', () => {
-      const result = validateParameter('beta', 0.000001);
+      const result = validateParameter('beta', -0.1);
       expect(result.isValid).toBe(false);
       expect(result.error).toContain('must be between');
     });
@@ -31,6 +36,11 @@ describe('Parameter Validation', () => {
 
     it('should accept valid gamma values', () => {
       const result = validateParameter('gamma', 0.1);
+      expect(result.isValid).toBe(true);
+    });
+
+    it('should accept gamma at zero', () => {
+      const result = validateParameter('gamma', 0);
       expect(result.isValid).toBe(true);
     });
 
@@ -278,8 +288,8 @@ describe('Parameter Validation', () => {
 
   describe('PARAMETER_RANGES', () => {
     it('should define correct ranges for all parameters', () => {
-      expect(PARAMETER_RANGES.beta).toEqual([0.00001, 10]);
-      expect(PARAMETER_RANGES.gamma).toEqual([0.001, 10]);
+      expect(PARAMETER_RANGES.beta).toEqual([0, 10]);
+      expect(PARAMETER_RANGES.gamma).toEqual([0, 10]);
       expect(PARAMETER_RANGES.mu).toEqual([0, 1]);
       expect(PARAMETER_RANGES.alpha).toEqual([0, 10]);
       expect(PARAMETER_RANGES.N).toEqual([1, 1000000]);

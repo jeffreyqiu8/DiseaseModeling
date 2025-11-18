@@ -12,7 +12,8 @@ describe('NaturalDemographics Model', () => {
 
       const derivatives = model.computeDerivatives(state, params);
 
-      // dS/dt = μN - βSI/N - μS = 0.01*1000 - 0.5*990*10/1000 - 0.01*990
+      // P = S + I + R = 990 + 10 + 0 = 1000
+      // dS/dt = μP - βSI/N - μS = 0.01*1000 - 0.5*990*10/1000 - 0.01*990
       //       = 10 - 4.95 - 9.9 = -4.85
       expect(derivatives.S).toBeCloseTo(-4.85, 5);
 

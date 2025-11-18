@@ -43,6 +43,12 @@ export class BasicSIR implements SIRModel {
    */
   calculateR0(params: ModelParameters): number {
     const { beta, gamma } = params;
+    
+    // Handle edge case where gamma = 0 (no recovery)
+    if (gamma === 0) {
+      return beta > 0 ? Infinity : 0;
+    }
+    
     return beta / gamma;
   }
 
