@@ -1,0 +1,161 @@
+.timeseries-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ensure Plotly plot fills container */
+.timeseries-container > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Error and empty states */
+.timeseries-empty,
+.timeseries-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  text-align: center;
+  padding: var(--spacing-xl);
+  gap: var(--spacing-md);
+}
+
+.timeseries-empty::before {
+  content: '📊';
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.timeseries-empty p {
+  color: var(--color-text-tertiary);
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.timeseries-error {
+  background-color: var(--color-error-bg);
+  border: 2px solid var(--color-error);
+  border-radius: var(--radius-lg);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.timeseries-error::before {
+  content: '⚠️';
+  font-size: 2.5rem;
+}
+
+.timeseries-error h4 {
+  color: #fca5a5;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.timeseries-error p {
+  color: #fca5a5;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* Loading state */
+.timeseries-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  gap: var(--spacing-md);
+}
+
+.timeseries-loading::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.timeseries-loading p {
+  color: var(--color-text-tertiary);
+  font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .timeseries-container {
+    min-height: 350px;
+  }
+
+  .timeseries-empty,
+  .timeseries-error {
+    padding: var(--spacing-lg);
+    min-height: 250px;
+  }
+
+  .timeseries-empty::before {
+    font-size: 2.5rem;
+  }
+
+  .timeseries-error::before {
+    font-size: 2rem;
+  }
+
+  .timeseries-error h4 {
+    font-size: 1rem;
+  }
+
+  .timeseries-error p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeseries-container {
+    min-height: 300px;
+  }
+
+  .timeseries-empty,
+  .timeseries-error {
+    padding: var(--spacing-md);
+    min-height: 200px;
+  }
+
+  .timeseries-empty::before {
+    font-size: 2rem;
+  }
+
+  .timeseries-error::before {
+    font-size: 1.5rem;
+  }
+}

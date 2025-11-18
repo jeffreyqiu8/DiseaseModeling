@@ -1,0 +1,142 @@
+.r0-display {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--transition-slow);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: visible;
+  min-height: 150px;
+}
+
+.r0-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background: radial-gradient(circle at center, currentColor, transparent);
+  pointer-events: none;
+}
+
+.r0-display.epidemic {
+  background-color: var(--color-error-bg);
+  border: 2px solid var(--color-error);
+  color: var(--color-error);
+  animation: pulseEpidemic 2s ease-in-out infinite;
+}
+
+.r0-display.safe {
+  background-color: var(--color-success-bg);
+  border: 2px solid var(--color-success);
+  color: var(--color-success);
+}
+
+@keyframes pulseEpidemic {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.r0-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.r0-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: var(--spacing-sm) 0;
+  font-family: 'Courier New', 'Consolas', monospace;
+  position: relative;
+  z-index: 1;
+  transition: transform var(--transition-base);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.r0-display:hover .r0-value {
+  transform: scale(1.05);
+}
+
+.r0-display.epidemic .r0-value {
+  color: #ffffff !important;
+}
+
+.r0-display.safe .r0-value {
+  color: #ffffff !important;
+}
+
+.r0-interpretation {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #ffffff;
+  margin-top: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.r0-display.epidemic .r0-interpretation {
+  font-weight: 500;
+}
+
+/* Threshold indicator */
+.r0-threshold {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid currentColor;
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+  opacity: 0.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .r0-display {
+    padding: var(--spacing-md);
+  }
+
+  .r0-value {
+    font-size: 2rem;
+  }
+
+  .r0-label {
+    font-size: 0.8rem;
+  }
+
+  .r0-interpretation {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .r0-display {
+    padding: var(--spacing-sm);
+  }
+
+  .r0-value {
+    font-size: 1.75rem;
+  }
+
+  .r0-label {
+    font-size: 0.75rem;
+  }
+
+  .r0-interpretation {
+    font-size: 0.75rem;
+  }
+}
